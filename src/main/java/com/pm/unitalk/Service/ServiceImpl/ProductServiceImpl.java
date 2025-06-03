@@ -71,6 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deletePost(Long postId) {
         Product product =this.postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Product","product id",postId));
+        fileService.deleteImage(path,product.getImage());
         this.postRepo.delete(product);
     }
 
