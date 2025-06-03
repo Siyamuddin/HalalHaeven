@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title != null ? title + ' | UniTalk' : 'UniTalk - Online Shopping'}">Halal Haven - Mart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Halal Haven</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item" th:href="@{'/category/' + ${category.categoryId}}" th:text="${category.categoryTitle}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2" th:action="@{/search}" method="get">
+                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search products..." aria-label="Search" required>
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <!-- Authentication Links -->
+                <ul class="navbar-nav">
+                    <!-- Show these links when user is not authenticated -->
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    </li>
+
+                    <!-- Show these links when user is authenticated -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li sec:authorize="hasRole('ADMIN')">
+                                <a class="dropdown-item" th:href="@{/admin}">Admin Dashboard</a>
+                            </li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item" type="submit">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5 mb-4">
+        <div class="container">
+            <h1 class="display-4" th:text="${title != null ? title : 'Welcome to UniTalk Shop'}">Welcome to Halal Haven Shop</h1>
+            <p class="lead" th:if="${title == 'All Products' || title == null}">Discover amazing products at great prices</p>
+            <p class="lead" th:if="${title != null && title != 'All Products' && !title.startsWith('Search Results')}">Browse our collection of products in this category</p>
+            <p class="lead" th:if="${title != null && title.startsWith('Search Results')}">Here are the products matching your search</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Categories</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="category : ${categories}">
+                            <a th:href="@{'/category/' + ${category.categoryId}}" class="text-decoration-none" th:text="${category.categoryTitle}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                <!-- No Products Message -->
+                <div class="alert alert-info" th:if="${products == null || products.isEmpty()}">
+                    <h4 class="alert-heading">No Products Found!</h4>
+                    <p>We couldn't find any products matching your criteria. Please try a different search or browse our categories.</p>
+                    <hr>
+                    <p class="mb-0">
+                        <a href="/" class="btn btn-primary">View All Products</a>
+                    </p>
+                </div>
+
+                <!-- Products Display -->
+                <div class="row" th:if="${products != null && !products.isEmpty()}">
+                    <!-- Product Card -->
+                    <div class="col-md-4 mb-4" th:each="product : ${products}">
+                        <div class="card h-100 product-card">
+                            <div class="product-image-container">
+                                <img th:src="@{'/api/v1/product/image/' + ${product.id}}" class="card-img-top product-image" alt="Product Image">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
+                                <p class="card-text price">₩<span th:text="${product.productPrice}">19.99</span></p>
+                                <p class="card-text description" th:text="${#strings.abbreviate(product.description, 100)}">Product description...</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <a th:href="@{'/product/' + ${product.id}}" class="btn btn-primary btn-sm">View Details</a>
+                                <a href="#" class="btn btn-success btn-sm">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav th:if="${totalPages > 1}">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Button -->
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                            <a class="page-link" th:if="${categoryId == null}" 
+                               th:href="@{'/?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize}}">Previous</a>
+                            <a class="page-link" th:if="${categoryId != null}" 
+                               th:href="@{'/category/' + ${categoryId} + '?pageNumber=' + ${currentPage - 1} + '&pageSize=' + ${pageSize}}">Previous</a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+                            th:classappend="${currentPage == i} ? 'active' : ''">
+                            <a class="page-link" th:if="${categoryId == null}" 
+                               th:href="@{'/?pageNumber=' + ${i} + '&pageSize=' + ${pageSize}}" 
+                               th:text="${i + 1}"></a>
+                            <a class="page-link" th:if="${categoryId != null}" 
+                               th:href="@{'/category/' + ${categoryId} + '?pageNumber=' + ${i} + '&pageSize=' + ${pageSize}}" 
+                               th:text="${i + 1}"></a>
+                        </li>
+
+                        <!-- Next Button -->
+                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                            <a class="page-link" th:if="${categoryId == null}" 
+                               th:href="@{'/?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize}}">Next</a>
+                            <a class="page-link" th:if="${categoryId != null}" 
+                               th:href="@{'/category/' + ${categoryId} + '?pageNumber=' + ${currentPage + 1} + '&pageSize=' + ${pageSize}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Halal Haven Mart</h5>
+                    <p>Your one-stop shop for all your needs.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Main St, City, Country</p>
+                        <p><i class="fas fa-phone me-2"></i> +1 (123) 456-7890</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@unitalk.com</p>
+                    </address>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 Halal Haven Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

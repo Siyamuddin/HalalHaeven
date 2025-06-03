@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | UniTalk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .dashboard-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .dashboard-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .dashboard-title {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">UniTalk</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item" th:href="@{'/category/' + ${category.categoryId}}" th:text="${category.categoryTitle}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- Authentication Links -->
+                <ul class="navbar-nav">
+                    <!-- Show these links when user is authenticated -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item" type="submit">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="mb-4">Admin Dashboard</h1>
+                <p class="lead">Welcome to the admin dashboard. Here you can manage your store.</p>
+            </div>
+        </div>
+        
+        <!-- Dashboard Cards -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card bg-primary text-white text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-users dashboard-icon"></i>
+                        <div class="dashboard-number" th:text="${userCount}">0</div>
+                        <div class="dashboard-title">Total Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card bg-success text-white text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-box-open dashboard-icon"></i>
+                        <div class="dashboard-number" th:text="${productCount}">0</div>
+                        <div class="dashboard-title">Total Products</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card bg-info text-white text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-tags dashboard-icon"></i>
+                        <div class="dashboard-number" th:text="${categoryCount}">0</div>
+                        <div class="dashboard-title">Total Categories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">Quick Actions</h2>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Products</h5>
+                        <p class="card-text">Add, edit, or delete products from your store.</p>
+                        <a href="#" class="btn btn-primary">Manage Products</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Categories</h5>
+                        <p class="card-text">Create, edit, or delete product categories.</p>
+                        <a href="#" class="btn btn-primary">Manage Categories</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Users</h5>
+                        <p class="card-text">View, edit, or delete user accounts.</p>
+                        <a href="#" class="btn btn-primary">Manage Users</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Site Settings</h5>
+                        <p class="card-text">Configure general settings for your store.</p>
+                        <a href="#" class="btn btn-primary">Site Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>UniTalk Shop</h5>
+                    <p>Your one-stop shop for all your needs.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Main St, City, Country</p>
+                        <p><i class="fas fa-phone me-2"></i> +1 (123) 456-7890</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@unitalk.com</p>
+                    </address>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 UniTalk Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
