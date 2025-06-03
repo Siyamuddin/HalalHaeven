@@ -46,6 +46,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/admin">Admin Dashboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/products}">Manage Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/categories}">Manage Categories</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                             Categories
@@ -137,7 +143,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Manage Categories</h5>
                         <p class="card-text">Create, edit, or delete product categories.</p>
-                        <a href="#" class="btn btn-primary">Manage Categories</a>
+                        <a th:href="@{/admin/categories}" class="btn btn-primary">Manage Categories</a>
                     </div>
                 </div>
             </div>

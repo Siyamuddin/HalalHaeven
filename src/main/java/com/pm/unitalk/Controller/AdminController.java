@@ -12,9 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -163,5 +166,119 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Error deleting product: " + e.getMessage());
         }
         return "redirect:/admin/products";
+    }
+
+    // Category Management
+    @GetMapping("/categories")
+    public String listCategories(
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "categoryId", required = false) String sortBy,
+            @RequestParam(value = "sortDirec", defaultValue = "asc", required = false) String sortDirec,
+            Model model) {
+
+        // Get all categories with pagination
+        List<CategoryDto> categories = categoryService.getCategories(pageNumber, pageSize, sortBy, sortDirec);
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", (int) Math.ceil(categories.size() / (double) pageSize));
+        model.addAttribute("totalItems", categories.size());
+        model.addAttribute("pageSize", pageSize);
+
+        return "admin/categories";
+    }
+
+    @GetMapping("/categories/new")
+    public String showCategoryForm(Model model) {
+        // Add categories for the navigation
+        List<CategoryDto> categories = categoryService.getCategories(0, 100, "categoryTitle", "asc");
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("category", new CategoryDto());
+        model.addAttribute("isEdit", false);
+
+        return "admin/category-form";
+    }
+
+    @PostMapping("/categories")
+    public String createCategory(
+            @Valid @ModelAttribute("category") CategoryDto categoryDto,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            // Add categories for the navigation
+            model.addAttribute("categories", categoryService.getCategories(0, 100, "categoryTitle", "asc"));
+            model.addAttribute("isEdit", false);
+            model.addAttribute("error", "Please correct the errors in the form");
+            return "admin/category-form";
+        }
+
+        try {
+            // Create the category
+            CategoryDto createdCategory = categoryService.createCategory(categoryDto);
+
+            redirectAttributes.addFlashAttribute("success", "Category created successfully!");
+            return "redirect:/admin/categories";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error creating category: " + e.getMessage());
+            return "redirect:/admin/categories/new";
+        }
+    }
+
+    @GetMapping("/categories/{categoryId}/edit")
+    public String showEditCategoryForm(@PathVariable Long categoryId, Model model) {
+        // Get the category
+        CategoryDto category = categoryService.getCategory(categoryId);
+
+        // Add categories for the navigation
+        List<CategoryDto> categories = categoryService.getCategories(0, 100, "categoryTitle", "asc");
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("category", category);
+        model.addAttribute("isEdit", true);
+
+        return "admin/category-form";
+    }
+
+    @PostMapping("/categories/{categoryId}")
+    public String updateCategory(
+            @PathVariable Long categoryId,
+            @Valid @ModelAttribute("category") CategoryDto categoryDto,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            // Add categories for the navigation
+            model.addAttribute("categories", categoryService.getCategories(0, 100, "categoryTitle", "asc"));
+            model.addAttribute("isEdit", true);
+            model.addAttribute("error", "Please correct the errors in the form");
+            return "admin/category-form";
+        }
+
+        try {
+            // Update the category
+            CategoryDto updatedCategory = categoryService.updateCategory(categoryDto, categoryId);
+
+            redirectAttributes.addFlashAttribute("success", "Category updated successfully!");
+            return "redirect:/admin/categories";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error updating category: " + e.getMessage());
+            return "redirect:/admin/categories/" + categoryId + "/edit";
+        }
+    }
+
+    @GetMapping("/categories/{categoryId}/delete")
+    public String deleteCategory(@PathVariable Long categoryId, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.deleteCategory(categoryId);
+            redirectAttributes.addFlashAttribute("success", "Category deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error deleting category: " + e.getMessage());
+        }
+        return "redirect:/admin/categories";
     }
 }

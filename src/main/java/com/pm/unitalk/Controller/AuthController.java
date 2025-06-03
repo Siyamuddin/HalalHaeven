@@ -61,10 +61,10 @@ public class AuthController {
     public String createAdminUser(RedirectAttributes redirectAttributes) {
         try {
             UserDTO adminUser = new UserDTO();
-            adminUser.setFirstName("Admin");
-            adminUser.setLastName("User");
+            adminUser.setFirstName("Halal");
+            adminUser.setLastName("Haven");
             adminUser.setEmail("siyamuddin177@gmail.com");
-            adminUser.setPassword("12345678");
+            adminUser.setPassword("halalhaven638");
             adminUser.setRole("ADMIN");
 
             userServices.registerUser(adminUser);
