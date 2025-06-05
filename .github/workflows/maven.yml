@@ -1,4 +1,4 @@
-name: Ai buddy CI/CD
+name: halalhaven CI/CD
 
 on:
   push:
