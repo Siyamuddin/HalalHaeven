@@ -13,4 +13,6 @@ public interface UserServices {
     List<UserDTO> getAllUser(int pageNumber, int pageSize, String sortBy, String direction);
     List<UserDTO> searchByUserName(String userName,int pageNumber, int pageSize, String sortBy, String direction);
     UserDTO findUserByEmail(String email);
+    //todo admin creator: admin will be able to make others admin
+    // todo : count daily and monthly and totoal visitors
 }

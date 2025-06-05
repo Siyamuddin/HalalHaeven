@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface LocalUserRepo extends JpaRepository<LocalUser,Long> {
     Page<LocalUser> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName, Pageable pageable);
-    List<LocalUser> findByEmailContainingIgnoreCase(String email);
+    List<LocalUser> findByEmailIgnoreCase(String email);
     LocalUser findByEmail(String email);
 }

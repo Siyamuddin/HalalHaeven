@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserServices {
     @Override
     public UserDTO registerUser(UserDTO userDTO){
 
-        List<LocalUser> userList=localUserRepo.findByEmailContainingIgnoreCase(userDTO.getEmail());
+        List<LocalUser> userList=localUserRepo.findByEmailIgnoreCase(userDTO.getEmail());
         if(userList.isEmpty()){
             LocalUser localUser=modelMapper.map(userDTO, LocalUser.class);
             // Encode the password before saving
@@ -124,7 +124,7 @@ return true;
 
     @Override
     public UserDTO findUserByEmail(String email) {
-        List<LocalUser> users = localUserRepo.findByEmailContainingIgnoreCase(email);
+        List<LocalUser> users = localUserRepo.findByEmailIgnoreCase(email);
         if (users.isEmpty()) {
             return null; // Return null if no user is found with the given email
         }

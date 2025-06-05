@@ -2,9 +2,12 @@ package com.pm.unitalk.Service.ServiceImpl;
 
 import com.pm.unitalk.Service.FileService;
 import lombok.extern.slf4j.Slf4j;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +18,8 @@ import java.util.UUID;
 @Service
 
 public class FileServiceImpl implements FileService {
+
+
     @Override
     public String uploadImage(String path, MultipartFile file) throws IOException {
         //File name
@@ -35,6 +40,9 @@ public class FileServiceImpl implements FileService {
         Files.copy(file.getInputStream(),Paths.get(filePath));
         return fileName1;
     }
+
+
+
 
     @Override
     public InputStream getSource(String path, String fileName) throws FileNotFoundException {
