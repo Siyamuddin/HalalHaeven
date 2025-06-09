@@ -46,4 +46,3 @@ jobs:
             -e MYSQLPASSWORD=${{ secrets.MYSQLPASSWORD }} \
             uddin17/halalhaven:latest
 
-#        hi
