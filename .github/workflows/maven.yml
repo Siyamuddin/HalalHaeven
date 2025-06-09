@@ -40,10 +40,12 @@ jobs:
       - name: Delete old container
         run: docker rm -f halalhaven-container
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name halalhaven-container \
-          -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
-          -e MYSQLUSER=${{ secrets.MYSQLUSER }} \
-          -e MYSQLPASSWORD=${{ secrets.MYSQLPASSWORD }} \
-          uddin17/halalhaven:latest
+        run: |
+          docker run -d -p 8080:8080 --name halalhaven-container \
+            -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
+            -e MYSQLUSER=${{ secrets.MYSQLUSER }} \
+            -e MYSQLPASSWORD=${{ secrets.MYSQLPASSWORD }} \
+            uddin17/halalhaven:latest
+      
 
 
