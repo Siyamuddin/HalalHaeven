@@ -24,9 +24,24 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: uddin17/ai_buddy
+          image: uddin17/halalhaven
           tags: latest
           registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy:
+    needs: build
+    runs-on: [halalhaven-ec2]
+    steps:
+      - name: Pull the image from docker hub
+        run: docker pull uddin17/halalhaven:latest
+      - name: Delete old container
+        run: docker rm -f halalhaven-container
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name halalhaven-container \
+            -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
+            -e MYSQLUSER=${{ secrets.MYSQLUSER }} \
+            -e MYSQLPASSWORD=${{ secrets.MYSQLPASSWORD }} \
+            uddin17/halalhaven:latest
