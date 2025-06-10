@@ -23,7 +23,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**").permitAll()
                     .requestMatchers("/category/{}").permitAll()
-                    .requestMatchers("/product/{}").permitAll()
+                    .requestMatchers("/product/{}","/search/{}").permitAll()
                 .requestMatchers("/api/v1/product/image/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
