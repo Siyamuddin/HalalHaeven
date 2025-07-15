@@ -36,7 +36,7 @@ public class ProductController {
                                                           @RequestParam(value="pageNumber",defaultValue = "0",required = false) Integer pageNumber,
                                                           @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize,
                                                           @RequestParam(value = "sortBy",defaultValue = "id",required = false) String sortBy,
-                                                          @RequestParam(value = "sortDirec",defaultValue = "asc",required = false) String sortDirec)
+                                                          @RequestParam(value = "sortDirec",defaultValue = "dsc",required = false) String sortDirec)
     {
         PostResponse postResponse=this.productService.getPostByCategory(categoryId,pageNumber,pageSize,sortBy,sortDirec);
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
@@ -51,7 +51,7 @@ public class ProductController {
     public ResponseEntity<PostResponse> getAllPost(@RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
                                                    @RequestParam(value = "sortBy", defaultValue = "id",required = false) String sortBy,
-                                                   @RequestParam(value = "sortDirec",defaultValue = "asc",required = false) String sortDirec)
+                                                   @RequestParam(value = "sortDirec",defaultValue = "dsc",required = false) String sortDirec)
     {
         PostResponse postResponse=this.productService.getAllPost(pageNumber,pageSize,sortBy,sortDirec);
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);

@@ -47,7 +47,7 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> getCategories(@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
     @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
     @RequestParam(value = "sortBy",defaultValue = "categoryId",required = false) String sortBy,
-    @RequestParam(value = "sortDirec",defaultValue = AppConstants.SORT_DIREC,required = false) String sortDirec)
+    @RequestParam(value = "sortDirec",defaultValue = "dsc",required = false) String sortDirec)
     {
         log.info("The loading data recieved successfully");
         List<CategoryDto> categoryDtos=this.categoryService.getCategories(pageNumber,pageSize,sortBy,sortDirec);

@@ -27,7 +27,7 @@ public class HomeController {
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDirec", defaultValue = "asc", required = false) String sortDirec,
+            @RequestParam(value = "sortDirec", defaultValue = "dsc", required = false) String sortDirec,
             Model model) {
 
         // Get all products with pagination
@@ -51,7 +51,7 @@ public class HomeController {
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDirec", defaultValue = "asc", required = false) String sortDirec,
+            @RequestParam(value = "sortDirec", defaultValue = "dsc", required = false) String sortDirec,
             Model model) {
 
         // Get products by category with pagination
