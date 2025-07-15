@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /product/
+Allow: /category/
+Allow: /search
+Allow: /login
+Allow: /register
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /create-admin
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Sitemap locations
+Sitemap: https://halalhaven.kr/sitemap.xml
+Sitemap: https://halalhaven.kr/dynamic-sitemap.xml
