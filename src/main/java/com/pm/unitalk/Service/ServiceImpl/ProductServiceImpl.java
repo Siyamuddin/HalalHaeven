@@ -2,6 +2,7 @@ package com.pm.unitalk.Service.ServiceImpl;
 import com.pm.unitalk.DTOs.ProductDTO;
 import com.pm.unitalk.Exceptions.ResourceNotFoundException;
 import com.pm.unitalk.Model.Category;
+import com.pm.unitalk.Model.CloudinaryImage;
 import com.pm.unitalk.Model.LocalUser;
 import com.pm.unitalk.Model.Product;
 import com.pm.unitalk.Repository.CategoryRepo;
@@ -50,6 +51,7 @@ public class ProductServiceImpl implements ProductService {
         Category category=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","category id",categoryId));
         Product product =this.modelMapper.map(productDto, Product.class);
         product.setImage("halalhaven.png");
+        product.setImagePublicId("ImagePublicId");
         product.setCategory(category);
         product.setLocalUser(user);
         Product newProduct =this.postRepo.save(product);
@@ -71,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deletePost(Long postId) {
         Product product =this.postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Product","product id",postId));
-        fileService.deleteImage(path,product.getImage());
+        fileService.deleteImage(product.getImagePublicId());
         this.postRepo.delete(product);
     }
 
@@ -170,15 +172,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO uploadImage(Long productId, MultipartFile file) {
         Product product=postRepo.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","ID",productId));
-        fileService.deleteImage(path, product.getImage());
-        String fileUrl=null;
+        fileService.deleteImage( product.getImagePublicId());
+        CloudinaryImage fileUrl=null;
         try {
-            fileUrl=fileService.uploadImage(path,file);
+             fileUrl=fileService.uploadImage(file);
         } catch (IOException e) {
             log.error("Found an Error while uploading image here is the description: "+e);
             throw new RuntimeException("Having problem while uploading image."+e);
         }
-        product.setImage(fileUrl);
+        product.setImage(fileUrl.getUrl());
+        product.setImagePublicId(fileUrl.getPublicId());
         Product savedProduct=postRepo.save(product);
 
         return modelMapper.map(savedProduct,ProductDTO.class);
@@ -187,15 +190,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO changeImage(Long productId,MultipartFile file) {
         Product product=postRepo.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","ID",productId));
-        fileService.deleteImage(path, product.getImage());
-        String fileUrl=null;
+        fileService.deleteImage(product.getImagePublicId());
+        CloudinaryImage fileUrl=null;
         try {
-            fileUrl=fileService.uploadImage(path,file);
+            fileUrl=fileService.uploadImage(file);
         } catch (IOException e) {
             log.error("Found an Error while uploading image here is the description: "+e);
             throw new RuntimeException("Having problem while uploading image."+e);
         }
-        product.setImage(fileUrl);
+        product.setImage(fileUrl.getUrl());
+        product.setImagePublicId(fileUrl.getPublicId());
         Product savedProduct=postRepo.save(product);
 
         return modelMapper.map(savedProduct,ProductDTO.class);
@@ -206,10 +210,13 @@ public class ProductServiceImpl implements ProductService {
         Product product=postRepo.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","ID",productId));
         InputStream inputStream;
         try {
-             inputStream=fileService.getSource(path,product.getImage());
+             inputStream=fileService.getSource(product.getImage());
         } catch (FileNotFoundException e) {
             log.error("Found an Error while loading image here is the description: "+e);
             throw new RuntimeException("Having problem while loading image."+e);
+        } catch (IOException e) {
+            log.error("Found an Error while loading image here is the description: "+e);
+            throw new RuntimeException(e);
         }
         return inputStream;
     }
