@@ -18,6 +18,7 @@ public class ProductDTO {
     private Double productPrice;
     private String quantity;
     private String image;
+    private String imagePublicId;
     private Date createdAt;
     private Date updatedAt;
     private UserDTO localUser;

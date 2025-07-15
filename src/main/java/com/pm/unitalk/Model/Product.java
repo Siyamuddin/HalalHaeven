@@ -26,6 +26,7 @@ public class Product {
     @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
     private String image;
+    private String imagePublicId;
     @Column(nullable = false)
     private Double productPrice;
     @Column(nullable = false)

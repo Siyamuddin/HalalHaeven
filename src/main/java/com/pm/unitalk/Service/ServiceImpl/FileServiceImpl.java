@@ -1,23 +1,64 @@
 package com.pm.unitalk.Service.ServiceImpl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.pm.unitalk.Model.CloudinaryImage;
 import com.pm.unitalk.Service.FileService;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.imgscalr.Scalr;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
 @Service
 
 public class FileServiceImpl implements FileService {
+    private Cloudinary cloudinary;
+
+    @Value("${cloudinary.cloud-name}")
+    private String cloudName;
+
+    @Value("${cloudinary.api-key}")
+    private String apiKey;
+
+    @Value("${cloudinary.api-secret}")
+    private String apiSecrete;
+
+    @PostConstruct
+    public void initCloudinary() {
+        this.cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", apiSecrete
+        ));
+    }
+    //cloudinary
+    public CloudinaryImage uploadImage(MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+        String randomID = UUID.randomUUID().toString();
+        String uniqueFilename = randomID.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
+
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                "public_id", "ecommerce/" + uniqueFilename,
+                "folder", "ecommerce"
+        ));
+
+        String url = (String) uploadResult.get("secure_url");
+        String publicId = (String) uploadResult.get("public_id");
+
+        return new CloudinaryImage(url, publicId);
+    }
 
 
     @Override
@@ -44,12 +85,43 @@ public class FileServiceImpl implements FileService {
 
 
 
+
+    //cloudinary
+    public InputStream getSource(String imageUrl) throws IOException {
+        try {
+            URL url = new URL(imageUrl); // Will fail if no protocol
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            return connection.getInputStream();
+        } catch (MalformedURLException e) {
+            log.error("Invalid image URL provided: {}", imageUrl, e);
+            throw new RuntimeException("Image URL is invalid: " + imageUrl);
+        }
+    }
+
+
     @Override
     public InputStream getSource(String path, String fileName) throws FileNotFoundException {
         String fullPath=path+File.separator+fileName;
         InputStream is=new FileInputStream(fullPath);
         return is;
     }
+
+
+
+
+
+    //cloudinary
+    public boolean deleteImage(String publicId) {
+        try {
+            Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            return "ok".equals(result.get("result"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     @Override
     public String deleteImage(String path, String fileName) {
