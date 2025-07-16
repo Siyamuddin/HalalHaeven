@@ -178,6 +178,9 @@
         .card:hover {
             box-shadow: 0 6px 16px rgba(0,0,0,0.12);
         }
+        .hero-section {
+            display: none !important;
+        }
         @media (max-width: 768px) {
             .hero-section,
             .category-sidebar {
@@ -353,6 +356,30 @@
                                         }
                                     });
                                 </script>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Kakao Map Section -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="mb-3">Shop Location</h5>
+                                    <!-- * 카카오맵 - 지도퍼가기 -->
+                                    <!-- 1. 지도 노드 -->
+                                    <div id="daumRoughmapContainer1752674164740" class="root_daum_roughmap root_daum_roughmap_landing"></div>
+                                    <!-- 2. 설치 스크립트 (only once per page) -->
+                                    <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+                                    <!-- 3. 실행 스크립트 -->
+                                    <script charset="UTF-8">
+                                        new daum.roughmap.Lander({
+                                            "timestamp" : "1752674164740",
+                                            "key" : "5qohbitochn",
+                                            "mapWidth" : "100%",
+                                            "mapHeight" : "360"
+                                        }).render();
+                                    </script>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -560,34 +560,15 @@
             <p class="hero-text" th:if="${title != null && title.startsWith('Search Results')}">Here are the products matching your search</p>
         </div>
     </div>
-    <!-- Mobile Categories (only visible on mobile) -->
-    <div class="container mobile-categories" style="display:none;">
-        <div class="card category-sidebar">
-            <div class="category-header text-white">
-                <h6 class="mb-0">Categories</h6>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item category-item p-1" th:each="category : ${categories}">
-                    <a th:href="@{'/category/' + ${category.categoryId}}" class="text-decoration-none small" th:text="${category.categoryTitle}"></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Hamburger Menu for Categories (Mobile Only) -->
-    <div class="mobile-hamburger" style="display:none;">
-        <button id="categoryMenuToggle" class="hamburger-btn" aria-label="Toggle categories">
-            <span class="hamburger-icon"></span>
-        </button>
-        <div id="mobileCategoryMenu" class="mobile-category-menu">
-            <div class="category-header text-white">
-                <h6 class="mb-0">Categories</h6>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item category-item p-1" th:each="category : ${categories}">
-                    <a th:href="@{'/category/' + ${category.categoryId}}" class="text-decoration-none small" th:text="${category.categoryTitle}"></a>
-                </li>
-            </ul>
+    <!-- Mobile Category Pills Bar (only visible on mobile) -->
+    <div class="mobile-category-pills-bar d-block d-md-none shadow-sm" style="background:#fcfcfc; border-bottom:1px solid #eee; padding:0.5rem 0;">
+        <div class="mobile-category-pills d-flex flex-nowrap overflow-auto px-2" style="gap:0.5rem;">
+            <a th:href="@{/}" class="mobile-category-pill" th:classappend="${categoryId == null} ? 'active' : ''">All</a>
+            <a th:each="category : ${categories}"
+               th:href="@{'/category/' + ${category.categoryId}}"
+               th:text="${category.categoryTitle}"
+               class="mobile-category-pill"
+               th:classappend="${categoryId == category.categoryId} ? 'active' : ''"></a>
         </div>
     </div>
 
@@ -633,13 +614,7 @@
                                     <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="card-text price mb-0">₩<span th:text="${product.productPrice}">19.99</span></p>
-                                        <div class="text-warning">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                        </div>
+                                        <!-- Removed product rating stars here -->
                                     </div>
                                     <p class="card-text description" th:text="${#strings.abbreviate(product.description, 70)}">Product description...</p>
                                 </div>
