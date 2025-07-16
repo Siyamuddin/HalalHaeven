@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**","/favicon/**","/ico/**").permitAll()
+                .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**","/favicon/**","/ico/**","/robots.txt","/dynamic-sitemap.xml","sitemap.xml").permitAll()
                     .requestMatchers("/category/{}").permitAll()
                     .requestMatchers("/product/{}","/search/**","/favicon/**").permitAll()
                 .requestMatchers("/api/v1/product/image/**").permitAll()

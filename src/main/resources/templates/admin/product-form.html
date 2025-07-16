@@ -29,13 +29,58 @@
             color: red;
             margin-left: 4px;
         }
+        /* Loading Animation Styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s linear;
+        }
+        .loading-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-text {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="d-flex flex-column align-items-center">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing, please wait...</div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">UniTalk</a>
+            <a class="navbar-brand" href="/">Halal Haven</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -111,7 +156,7 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <form th:action="${isEdit ? '/admin/products/' + product.id : '/admin/products'}" 
+                        <form id="productForm" th:action="${isEdit ? '/admin/products/' + product.id : '/admin/products'}" 
                               method="post" 
                               enctype="multipart/form-data" 
                               th:object="${product}">
@@ -139,13 +184,14 @@
 
                             <!-- Product Category -->
                             <div class="mb-3">
-                                <label for="categoryId" class="form-label required-field">Category</label>
-                                <select class="form-select" id="categoryId" name="categoryId" required>
+                                <label for="categoryId" class="form-label" th:classappend="${!isEdit ? 'required-field' : ''}">Category</label>
+                                <select class="form-select" id="categoryId" name="categoryId" th:required="${!isEdit}">
                                     <option value="">Select a category</option>
                                     <option th:each="category : ${categories}" 
                                             th:value="${category.categoryId}" 
                                             th:text="${category.categoryTitle}"></option>
                                 </select>
+                                <small class="text-muted" th:if="${isEdit}">You don't need to reselect the category when updating a product.</small>
                             </div>
 
                             <!-- Product Description -->
@@ -153,6 +199,9 @@
                                 <label for="description" class="form-label required-field">Description</label>
                                 <textarea class="form-control" id="description" name="description" 
                                           th:field="*{description}" rows="5" required></textarea>
+                                <div class="mt-2" th:if="${!isEdit}">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="addDefaultInfo">Add Contact Information</button>
+                                </div>
                             </div>
 
                             <!-- Product Image -->
@@ -245,6 +294,39 @@
                     previewContainer.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            }
+        });
+
+        // Add default contact information to description
+        document.addEventListener('DOMContentLoaded', function() {
+            const addDefaultInfoBtn = document.getElementById('addDefaultInfo');
+            if (addDefaultInfoBtn) {
+                addDefaultInfoBtn.addEventListener('click', function() {
+                    const descriptionField = document.getElementById('description');
+                    const defaultInfo = `Inquire: +8201031107599\nEmail: koreahasan@gmail.com\nNaver Map: https://naver.me/x9zuaBqW\nKakao Map: https://kko.kakao.com/7KfdxEHSon`;
+
+                    // Add the default info to the description field
+                    descriptionField.value = defaultInfo + (descriptionField.value ? '\n\n' + descriptionField.value : '');
+                });
+            }
+
+            // No need for category pre-selection as it's handled by the form
+
+            // Loading animation for form submission
+            const productForm = document.getElementById('productForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (productForm && loadingOverlay) {
+                productForm.addEventListener('submit', function(event) {
+                    // Validate form before showing loading overlay
+                    if (productForm.checkValidity()) {
+                        // Show loading overlay
+                        loadingOverlay.classList.add('show');
+
+                        // Allow form submission to proceed
+                        return true;
+                    }
+                });
             }
         });
     </script>

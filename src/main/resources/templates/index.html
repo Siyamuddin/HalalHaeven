@@ -63,8 +63,8 @@
         /* Enhanced Hero Section */
         .hero-section {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            padding: 3.5rem 0;
-            margin-bottom: 2.5rem;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
             border-radius: 0 0 15px 15px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
@@ -120,40 +120,58 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         .product-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 12px 24px rgba(0,0,0,0.15);
         }
         .product-image-container {
-            height: 220px;
+            height: 270px; /* Increased from 220px */
+            min-height: 220px;
+            max-height: 320px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background-color: #f5f5f5;
         }
         .product-image {
-            height: 100%;
             width: 100%;
+            height: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
         }
         .product-card:hover .product-image {
             transform: scale(1.08);
         }
+        .card-body.p-3 {
+            padding: 0.75rem 1rem !important;
+            flex: 0 1 auto;
+        }
         .card-title {
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
             color: #2c3e50;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .price {
-            font-weight: 800;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: #3498db;
-            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
         }
         .description {
             color: #6c757d;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.85rem;
+            line-height: 1.3;
+            max-height: 2.6em;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
         }
         .btn-primary {
             background-color: #3498db;
@@ -172,13 +190,13 @@
         /* Modern Footer */
         .footer {
             background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-            padding: 3.5rem 0 1.5rem;
-            margin-top: 4rem;
+            padding: 2rem 0 1rem;
+            margin-top: 3rem;
             border-radius: 15px 15px 0 0;
         }
         .footer h5 {
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: #fff;
             letter-spacing: 0.5px;
         }
@@ -217,6 +235,243 @@
                 margin-bottom: 1.5rem;
             }
         }
+
+        /* Mobile search button styles */
+        .mobile-search-btn {
+            border: none;
+            background: transparent;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            margin-right: 0.5rem;
+        }
+
+        .mobile-search-form {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #343a40;
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .mobile-search-form.show {
+            display: block;
+        }
+        @media (max-width: 576px) {
+            .hero-section {
+                display: none !important;
+            }
+            .mobile-categories {
+                display: block !important;
+                margin-bottom: 1rem;
+            }
+            .product-grid-mobile {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 0.5rem !important;
+            }
+            .product-grid-mobile .col-lg-3,
+            .product-grid-mobile .col-md-4,
+            .product-grid-mobile .col-sm-6,
+            .product-grid-mobile .mb-4 {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 1 0 0 !important;
+                margin-bottom: 0 !important;
+                padding: 0 !important;
+            }
+        }
+        @media (min-width: 577px) {
+            .mobile-categories {
+                display: none !important;
+            }
+        }
+        @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700|Open+Sans:400,600,700&display=swap');
+        @media (max-width: 768px) {
+            body, .product-card, .card-title, .price, .description, .btn {
+                font-family: 'Roboto', 'Open Sans', Arial, sans-serif !important;
+            }
+            .hero-section, .mobile-categories, .category-sidebar {
+                display: none !important;
+            }
+            .mobile-hamburger {
+                display: flex !important;
+                align-items: center;
+                padding: 10px 0 10px 10px;
+                background: #fff;
+                position: sticky;
+                top: 0;
+                z-index: 1001;
+            }
+            .hamburger-btn {
+                background: none;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 0;
+                margin-right: 10px;
+            }
+            .hamburger-icon {
+                display: inline-block;
+                width: 28px;
+                height: 3px;
+                background: #3498db;
+                border-radius: 2px;
+                position: relative;
+            }
+            .hamburger-icon::before, .hamburger-icon::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                width: 28px;
+                height: 3px;
+                background: #3498db;
+                border-radius: 2px;
+                transition: 0.3s;
+            }
+            .hamburger-icon::before { top: -8px; }
+            .hamburger-icon::after { top: 8px; }
+            .mobile-category-menu {
+                display: none;
+                position: absolute;
+                left: 10px;
+                top: 45px;
+                width: 90vw;
+                max-width: 320px;
+                background: #fff;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+                border-radius: 8px;
+                z-index: 1002;
+                padding: 10px 0 10px 0;
+            }
+            .mobile-category-menu.show {
+                display: block;
+                animation: fadeIn 0.2s;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .product-grid-mobile {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px !important;
+                overflow-x: auto;
+                scroll-behavior: smooth;
+                padding-bottom: 10px;
+            }
+            .product-grid-mobile .col-lg-3,
+            .product-grid-mobile .col-md-4,
+            .product-grid-mobile .col-sm-6,
+            .product-grid-mobile .mb-4 {
+                width: 90vw !important;
+                max-width: 250px !important;
+                min-width: 200px;
+                height: 320px !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                display: flex;
+                justify-content: center;
+            }
+            .product-card {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 250px;
+                min-width: 200px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                box-shadow: 0 2px 8px rgba(52,152,219,0.10);
+                border-radius: 12px;
+                background: #fff;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+            .product-card:active, .product-card:hover {
+                transform: scale(1.03);
+                box-shadow: 0 8px 24px rgba(52,152,219,0.18);
+            }
+            .product-image-container {
+                width: 100%;
+                height: 160px !important;
+                min-height: 120px;
+                max-height: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f5f5f5;
+                border-radius: 12px 12px 0 0;
+                margin-bottom: 8px;
+            }
+            .product-image {
+                width: 90%;
+                height: 90%;
+                object-fit: contain;
+                display: block;
+                margin: 0 auto;
+            }
+            .card-body.p-3 {
+                width: 100%;
+                padding: 0.5rem 0.7rem !important;
+                text-align: center;
+                flex: 0 1 auto;
+            }
+            .card-title {
+                font-size: 14px !important;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 0.2rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .price {
+                font-size: 12px !important;
+                font-weight: 700;
+                color: #3498db;
+                margin-bottom: 0.2rem;
+            }
+            .description {
+                color: #6c757d;
+                font-size: 12px !important;
+                line-height: 1.3;
+                max-height: 2.6em;
+                overflow: hidden;
+                margin-bottom: 0.5rem;
+            }
+            .card-footer {
+                width: 100%;
+                background: #fff;
+                border-top: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5rem 0;
+            }
+            .btn-primary.btn-sm.w-100, .view-details-btn {
+                background: #3498db !important;
+                color: #fff !important;
+                border-radius: 20px !important;
+                border: none !important;
+                font-size: 13px !important;
+                font-weight: 600;
+                padding: 0.5rem 1.2rem !important;
+                margin: 0 auto;
+                box-shadow: 0 2px 8px rgba(52,152,219,0.10);
+                transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+                display: block;
+            }
+            .btn-primary.btn-sm.w-100:hover, .view-details-btn:hover {
+                background: #2176bd !important;
+                color: #fff !important;
+                box-shadow: 0 4px 16px rgba(52,152,219,0.18);
+                transform: scale(1.05);
+            }
+        }
     </style>
 </head>
 <body>
@@ -224,6 +479,23 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">Halal Haven</a>
+
+            <!-- Mobile Search Button (visible only on small screens) -->
+            <button class="mobile-search-btn d-lg-none" type="button" id="mobileSearchBtn">
+                <i class="bi bi-search"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+
+            <!-- Mobile Search Form (initially hidden) -->
+            <div class="mobile-search-form" id="mobileSearchForm">
+                <form class="d-flex" th:action="@{/search}" method="get">
+                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search products..." aria-label="Search" required>
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -243,7 +515,7 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex me-2" th:action="@{/search}" method="get">
+                <form class="d-none d-lg-flex me-2" th:action="@{/search}" method="get">
                     <input class="form-control me-2" type="search" name="keyword" placeholder="Search products..." aria-label="Search" required>
                     <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
@@ -282,10 +554,40 @@
     <!-- Hero Section -->
     <div class="hero-section text-white">
         <div class="container">
-            <h1 class="hero-title display-4" th:text="${title != null ? title : 'Welcome to UniTalk Shop'}">Welcome to Halal Haven Shop</h1>
-            <p class="hero-text" th:if="${title == 'All Products' || title == null}">Discover amazing products at great prices</p>
-            <p class="hero-text" th:if="${title != null && title != 'All Products' && !title.startsWith('Search Results')}">Browse our collection of products in this category</p>
+            <h1 class="hero-title display-4" th:text="${title != null ? title : 'Welcome to Hala Haven Shop'}">Welcome to Halal Haven Shop</h1>
+            <p class="hero-text" th:if="${title == 'Halal Products' || title == null}">Discover amazing products at great prices</p>
+            <p class="hero-text" th:if="${title != null && title != 'Halal Products' && !title.startsWith('Search Results')}">Browse our collection of products in this category</p>
             <p class="hero-text" th:if="${title != null && title.startsWith('Search Results')}">Here are the products matching your search</p>
+        </div>
+    </div>
+    <!-- Mobile Categories (only visible on mobile) -->
+    <div class="container mobile-categories" style="display:none;">
+        <div class="card category-sidebar">
+            <div class="category-header text-white">
+                <h6 class="mb-0">Categories</h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item category-item p-1" th:each="category : ${categories}">
+                    <a th:href="@{'/category/' + ${category.categoryId}}" class="text-decoration-none small" th:text="${category.categoryTitle}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Hamburger Menu for Categories (Mobile Only) -->
+    <div class="mobile-hamburger" style="display:none;">
+        <button id="categoryMenuToggle" class="hamburger-btn" aria-label="Toggle categories">
+            <span class="hamburger-icon"></span>
+        </button>
+        <div id="mobileCategoryMenu" class="mobile-category-menu">
+            <div class="category-header text-white">
+                <h6 class="mb-0">Categories</h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item category-item p-1" th:each="category : ${categories}">
+                    <a th:href="@{'/category/' + ${category.categoryId}}" class="text-decoration-none small" th:text="${category.categoryTitle}"></a>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -319,34 +621,33 @@
                 </div>
 
                 <!-- Products Display -->
-                <div class="row g-3" th:if="${products != null && !products.isEmpty()}">
+                <div class="row g-3 product-grid-mobile" style="margin:0;" th:if="${products != null && !products.isEmpty()}">
                     <!-- Product Card - Smaller grid for more products per row -->
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="product : ${products}">
-                        <div class="card h-100 product-card">
-                            <div class="position-absolute top-0 end-0 p-2">
-                                <span class="badge bg-primary rounded-pill">New</span>
-                            </div>
-                            <div class="product-image-container">
-                                <img th:src="@{'/api/v1/product/image/' + ${product.id}}" class="card-img-top product-image" alt="Product Image">
-                            </div>
-                            <div class="card-body p-3">
-                                <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <p class="card-text price mb-0">₩<span th:text="${product.productPrice}">19.99</span></p>
-                                    <div class="text-warning">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
+                        <a th:href="@{'/product/' + ${product.id}}" class="text-decoration-none">
+                            <div class="card h-100 product-card">
+                                <div class="product-image-container">
+                                    <img th:src="@{'/api/v1/product/image/' + ${product.id}}" class="card-img-top product-image" alt="Product Image">
                                 </div>
-                                <p class="card-text description" th:text="${#strings.abbreviate(product.description, 70)}">Product description...</p>
+                                <div class="card-body p-3">
+                                    <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <p class="card-text price mb-0">₩<span th:text="${product.productPrice}">19.99</span></p>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text description" th:text="${#strings.abbreviate(product.description, 70)}">Product description...</p>
+                                </div>
+                                <div class="card-footer bg-white border-top-0 d-flex justify-content-center">
+                                    <span class="btn btn-primary btn-sm w-100"><i class="fas fa-eye me-1"></i> View Details</span>
+                                </div>
                             </div>
-                            <div class="card-footer bg-white border-top-0 d-flex justify-content-center">
-                                <a th:href="@{'/product/' + ${product.id}}" class="btn btn-primary btn-sm w-100"><i class="fas fa-eye me-1"></i> View Details</a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -401,22 +702,22 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/" class="text-white"><i class="fas fa-angle-right me-2"></i>Home</a></li>
-                        <li class="mb-2"><a href="#" class="text-white"><i class="fas fa-angle-right me-2"></i>About Us</a></li>
-                        <li class="mb-2"><a href="#" class="text-white"><i class="fas fa-angle-right me-2"></i>Contact</a></li>
+                        <li class="mb-1"><a href="/" class="text-white"><i class="fas fa-angle-right me-2"></i>Home</a></li>
+                        <li class="mb-1"><a href="#" class="text-white"><i class="fas fa-angle-right me-2"></i>About Us</a></li>
+                        <li class="mb-1"><a href="#" class="text-white"><i class="fas fa-angle-right me-2"></i>Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contact Us</h5>
                     <address>
-                        <p><i class="fas fa-map-marker-alt me-2"></i> Seoul, South Korea</p>
-                        <p><i class="fas fa-phone me-2"></i>+8201031107599</p>
-                        <p><i class="fas fa-envelope me-2"></i>koreahasan@gmail.com</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i> Seoul, South Korea</p>
+                        <p class="mb-1"><i class="fas fa-phone me-2"></i>+8201031107599</p>
+                        <p class="mb-1"><i class="fas fa-envelope me-2"></i>koreahasan@gmail.com</p>
                     </address>
                 </div>
             </div>
-            <hr class="mt-4">
-            <div class="text-center py-3">
+            <hr class="mt-3">
+            <div class="text-center py-2">
                 <p class="mb-0">&copy; 2024 Halal Haven Shop. All rights reserved.</p>
             </div>
         </div>
@@ -438,6 +739,42 @@
             "email": "koreahasan@gmail.com",
             "url": "https://halalhaven.kr/"
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+            const mobileSearchForm = document.getElementById('mobileSearchForm');
+
+            mobileSearchBtn.addEventListener('click', function() {
+                mobileSearchForm.classList.toggle('show');
+            });
+
+            // Close search form when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileSearchBtn.contains(event.target) && !mobileSearchForm.contains(event.target)) {
+                    mobileSearchForm.classList.remove('show');
+                }
+            });
+        });
+    </script>
+    <script>
+        // Hamburger menu toggle for mobile categories
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleBtn = document.getElementById('categoryMenuToggle');
+            var menu = document.getElementById('mobileCategoryMenu');
+            if (toggleBtn && menu) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('show');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        menu.classList.remove('show');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
