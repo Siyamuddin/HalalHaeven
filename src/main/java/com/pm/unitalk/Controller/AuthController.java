@@ -63,7 +63,7 @@ public class AuthController {
             UserDTO adminUser = new UserDTO();
             adminUser.setFirstName("Halal");
             adminUser.setLastName("Haven");
-            adminUser.setEmail("siyamuddin177@gmail.com");
+            adminUser.setEmail("koreahasan@gmail.com");
             adminUser.setPassword("halalhaven638");
             adminUser.setRole("ADMIN");
 
