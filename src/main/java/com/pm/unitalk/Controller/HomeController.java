@@ -38,7 +38,7 @@ public class HomeController {
         PostResponse postResponse = productService.getAllPost(pageNumber, pageSize, sortBy, sortDirec);
 
         // Get all categories for the sidebar
-        model.addAttribute("categories", categoryService.getCategories(0, 100, "categoryId", "asc"));
+        model.addAttribute("categories", categoryService.getCategories(0, 100, "categoryId", "dsc"));
         model.addAttribute("products", postResponse.getContent());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", postResponse.getTotalPages());
