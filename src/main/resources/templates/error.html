@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #333; text-align: center; padding: 40px; }
+        .error-container { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: inline-block; padding: 32px 48px; }
+        h1 { font-size: 2.5rem; color: #d9534f; }
+        p { font-size: 1.2rem; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 th:text="${status}">Error</h1>
+        <p th:text="${error}">Something went wrong. We sorry for this Error from Halal Haven Authority.</p>
+        <p th:text="${message}"></p>
+        <p>
+            <a href="/">Go back to Home, Please try again.</a>
+        </p>
+    </div>
+</body>
+</html> 
