@@ -5,6 +5,7 @@ Allow: /category/
 Allow: /search
 Allow: /login
 Allow: /register
+Allow: /favicon
 
 # Disallow admin pages
 Disallow: /admin/
